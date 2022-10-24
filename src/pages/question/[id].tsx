@@ -11,7 +11,12 @@ export default function QuestionPage() {
 
   const { data } = trpc.useQuery(["questions.getOne", id]);
 
-  const { mutate: vote } = trpc.useMutation(["vote.add"]);
+  const client = trpc.useContext();
+  const { mutate: vote } = trpc.useMutation(["vote.add"], {
+    onSuccess: () => {
+      client.invalidateQueries(["vote.check"])
+    }
+  });
   const { data: voted } = trpc.useQuery([
     "vote.check",
     {
