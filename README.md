@@ -4,6 +4,6 @@ Creating polls could never be easier.
 
 ## TODO
 
-- [ ] Add Prisma
+- [x] Add Prisma
 - [ ] Add NextAuth
-- [ ] Add ability to create questions
+- [x] Add ability to create questions
