@@ -13,7 +13,17 @@ export const questionRouter = trpc
     async resolve({ input }) {
       return await prisma.pollQuestion.findMany({
         where: {
-          id: input?.id,
+          ownerToken: input?.id,
+        },
+      });
+    },
+  })
+  .query("getOne", {
+    input: z.string(),
+    async resolve({ input }) {
+      return await prisma.pollQuestion.findFirst({
+        where: {
+          id: input,
         },
       });
     },
@@ -26,6 +36,7 @@ export const questionRouter = trpc
       return await prisma.pollQuestion.create({
         data: {
           question: input.question,
+          options: ["Yes", "No"],
         },
       });
     },

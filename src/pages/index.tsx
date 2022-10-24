@@ -1,5 +1,6 @@
 import { trpc } from "@/utils/trpc";
 import React from "react";
+import Link from "next/link";
 
 const QuestionForm: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -37,7 +38,11 @@ export default function Home() {
         <h1 className="text-4xl font-bold">Questions</h1>
         <ul>
           {data.map((q) => (
-            <li key={q.id}>{q.question}</li>
+            <li key={q.id}>
+              <Link href={`/question/${q.id}`}>
+                <a className="hover:underline">{q.question}</a>
+              </Link>
+            </li>
           ))}
         </ul>
         <div className="p-2" />
