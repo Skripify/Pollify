@@ -2,6 +2,7 @@ import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { z } from "zod";
 import { questionRouter } from "./questions";
+import { voteRouter } from "./votes";
 export const appRouter = trpc
   .router()
   .query("hello", {
@@ -16,7 +17,8 @@ export const appRouter = trpc
       };
     },
   })
-  .merge("questions.", questionRouter);
+  .merge("questions.", questionRouter)
+  .merge("vote.", voteRouter);
 
 export type AppRouter = typeof appRouter;
 
