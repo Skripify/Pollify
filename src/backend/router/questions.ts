@@ -40,4 +40,16 @@ export const questionRouter = trpc
         },
       });
     },
+  })
+  .query("getVotes", {
+    input: z.string(),
+    async resolve({ input }) {
+      return await prisma.vote.groupBy({
+        where: {
+          questionId: input,
+        },
+        by: ["choice"],
+        _count: true,
+      });
+    },
   });

@@ -16,7 +16,7 @@ export const voteRouter = trpc
           id: input.id,
         },
       });
-      return await prisma.vote.create({
+      await prisma.vote.create({
         data: {
           questionId: input.id,
           voterToken: input.token,
@@ -24,6 +24,14 @@ export const voteRouter = trpc
             (v) => v.toLowerCase() === input.choice.toLowerCase()
           ),
         },
+      });
+
+      return await prisma.vote.groupBy({
+        where: {
+          questionId: input.id,
+        },
+        by: ["choice"],
+        _count: true,
       });
     },
   })
@@ -39,7 +47,6 @@ export const voteRouter = trpc
           questionId: input.question,
         },
       });
-      console.log(count);
       return count > 0;
     },
   });
