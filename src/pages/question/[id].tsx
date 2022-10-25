@@ -4,9 +4,32 @@ import { trpc } from "@/utils/trpc";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { unstable_getServerSession } from "next-auth";
+import { GetServerSideProps } from "next";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { hasCookie, getCookie, setCookie } from "cookies-next";
+import cuid from "cuid";
 
-export default function QuestionPage() {
-  const { data: session } = useSession({ required: true });
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await unstable_getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  );
+  if (session) return { props: { userId: session.user.id } };
+  if (hasCookie("token", { req: ctx.req, res: ctx.res }))
+    return {
+      props: { userId: getCookie("token", { req: ctx.req, res: ctx.res }) },
+    };
+  else {
+    setCookie("token", cuid(), { req: ctx.req, res: ctx.res });
+    return {
+      props: { userId: getCookie("token") },
+    };
+  }
+};
+
+export default function QuestionPage({ userId }: { userId: string }) {
   let totalVotes = 0;
 
   const router = useRouter();
@@ -28,14 +51,14 @@ export default function QuestionPage() {
   const { data: voted } = trpc.useQuery([
     "vote.check",
     {
-      id: session?.user.id as string,
+      id: userId,
       question: id,
     },
   ]);
   const { data: isOwner } = trpc.useQuery([
     "questions.isOwner",
     {
-      id: session?.user.id as string,
+      id: userId,
       question: id,
     },
   ]);
@@ -52,11 +75,9 @@ export default function QuestionPage() {
     else if (voteCount == undefined) return 0;
   };
 
-  if (!data || !session) return <Loading />;
+  if (!data) return <Loading />;
 
   if (data && data != undefined) getTotalVotes(votes);
-
-  console.log(votes);
 
   return (
     <>
@@ -99,9 +120,7 @@ export default function QuestionPage() {
               <button
                 type="button"
                 key={index}
-                onClick={() =>
-                  vote({ id, choice: index, token: session.user.id })
-                }
+                onClick={() => vote({ id, choice: index, token: userId })}
                 className="btn btn-outline rounded-md normal-case"
               >
                 {option.text}
