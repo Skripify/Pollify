@@ -51,7 +51,7 @@ export default function Create() {
 
         <form
           onSubmit={handleSubmit((data) => {
-            mutate({ ...data, id: session.user.id });
+            mutate(data);
           })}
           className="w-full"
         >
@@ -77,7 +77,7 @@ export default function Create() {
                 <div key={index}>
                   <section className="flex items-center space-x-3">
                     <input
-                      placeholder="name"
+                      defaultValue="name"
                       {...register(`options.${index}.text`, {
                         required: true,
                       })}

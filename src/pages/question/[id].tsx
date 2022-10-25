@@ -83,7 +83,7 @@ export default function QuestionPage() {
                 onClick={() =>
                   vote({ id, choice: index, token: session.user.id })
                 }
-                className="btn btn-outline rounded-md"
+                className="btn btn-outline rounded-md normal-case"
               >
                 {option.text}
               </button>

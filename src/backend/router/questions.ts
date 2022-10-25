@@ -40,6 +40,16 @@ export const questionRouter = trpc
       });
     },
   })
+  .mutation("delete", {
+    input: z.string(),
+    async resolve({ input }) {
+      return await prisma.pollQuestion.delete({
+        where: {
+          id: input,
+        },
+      });
+    },
+  })
   .query("getVotes", {
     input: z.string(),
     async resolve({ input }) {
