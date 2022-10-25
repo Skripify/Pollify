@@ -19,6 +19,22 @@ export const questionRouter = trpc
       });
     },
   })
+  .query("isOwner", {
+    input: z.object({
+      id: z.string().nullish(),
+      question: z.string(),
+    }),
+    async resolve({ input }) {
+      return await prisma.pollQuestion.findFirst({
+        where: {
+          id: input.question,
+          ownerToken: {
+            equals: input.id,
+          },
+        },
+      });
+    },
+  })
   .query("getOne", {
     input: z.string(),
     async resolve({ input }) {

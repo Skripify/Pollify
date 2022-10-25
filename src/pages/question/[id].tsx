@@ -32,6 +32,13 @@ export default function QuestionPage() {
       question: id,
     },
   ]);
+  const { data: isOwner } = trpc.useQuery([
+    "questions.isOwner",
+    {
+      id: session?.user.id as string,
+      question: id,
+    },
+  ]);
 
   const getTotalVotes = (votes: any) => {
     votes?.map((choice: { _count: number }) => {
@@ -65,7 +72,7 @@ export default function QuestionPage() {
         </h1>
         <div className="flex flex-col gap-4">
           {(data.options as { text: string }[])?.map((option, index) => {
-            if (voted)
+            if (isOwner || voted)
               return (
                 <div key={index}>
                   <div className="flex justify-between">
