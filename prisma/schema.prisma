@@ -30,7 +30,7 @@ model Vote {
   createdAt  DateTime @default(now())
   voterToken String   @db.VarChar(255)
 
-  question PollQuestion @relation(fields: [questionId], references: [id])
+  question PollQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId String
   choice   Int
 

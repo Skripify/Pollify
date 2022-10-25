@@ -21,6 +21,7 @@ export default function Create() {
   } = useForm<CreateQuestionInputType>({
     resolver: zodResolver(createQuestionValidator),
     defaultValues: {
+      id: session?.user.id,
       options: [{ text: "Yes" }, { text: "No" }],
     },
   });

@@ -6,6 +6,7 @@ export const createQuestionValidator = z.object({
     .array(z.object({ text: z.string().min(1).max(200) }))
     .min(2)
     .max(20),
+  id: z.string().nullish(),
 });
 
 export type CreateQuestionInputType = z.infer<typeof createQuestionValidator>;

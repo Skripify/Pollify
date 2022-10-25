@@ -34,6 +34,7 @@ export const questionRouter = trpc
     async resolve({ input }) {
       return await prisma.pollQuestion.create({
         data: {
+          ownerToken: input.id,
           question: input.question,
           options: input.options,
         },

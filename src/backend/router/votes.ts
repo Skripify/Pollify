@@ -11,6 +11,7 @@ export const voteRouter = trpc
       token: z.string(),
     }),
     async resolve({ input }) {
+      console.log(input.choice);
       await prisma.vote.create({
         data: {
           questionId: input.id,

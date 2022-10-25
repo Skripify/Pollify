@@ -48,6 +48,8 @@ export default function QuestionPage() {
 
   if (data && data != undefined) getTotalVotes(votes);
 
+  console.log(votes);
+
   return (
     <>
       <header className="p-4 flex w-full justify-between items-center">
@@ -66,11 +68,20 @@ export default function QuestionPage() {
                 <div key={index}>
                   <div className="flex justify-between">
                     <p className="font-bold">{option.text}</p>
-                    <p>{getPercent(votes?.[index]?._count)?.toFixed()}%</p>
+                    <p>
+                      {getPercent(
+                        votes?.[votes?.findIndex((v) => v.choice === index)]
+                          ?._count
+                      )?.toFixed()}
+                      %
+                    </p>
                   </div>
                   <progress
                     className="progress progress-info w-full"
-                    value={votes?.[index]?._count ?? 0}
+                    value={
+                      votes?.[votes?.findIndex((v) => v.choice === index)]
+                        ?._count ?? 0
+                    }
                     max={totalVotes}
                   />
                 </div>
