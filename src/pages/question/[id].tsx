@@ -14,7 +14,6 @@ export default function QuestionPage() {
 
   const { data } = trpc.useQuery(["questions.getOne", id]);
   const { data: votes } = trpc.useQuery(["questions.getVotes", id]);
-  console.log(votes);
 
   const client = trpc.useContext();
   const { mutate: vote } = trpc.useMutation(["vote.add"], {
