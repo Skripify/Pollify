@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { hasCookie, getCookie, setCookie } from "cookies-next";
 import cuid from "cuid";
+import NotFound from "../404";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await unstable_getServerSession(
@@ -36,7 +37,7 @@ export default function QuestionPage({ userId }: { userId: string }) {
   const { id } = router.query;
   if (!id || typeof id !== "string") return null;
 
-  const { data } = trpc.useQuery(["questions.getOne", id]);
+  const { data, isLoading } = trpc.useQuery(["questions.getOne", id]);
   const { data: votes } = trpc.useQuery(["questions.getVotes", id]);
 
   const client = trpc.useContext();
@@ -75,7 +76,8 @@ export default function QuestionPage({ userId }: { userId: string }) {
     else if (voteCount == undefined) return 0;
   };
 
-  if (!data) return <Loading />;
+  if (isLoading) return <Loading />;
+  if (!data) return <NotFound type="question" />;
 
   if (data && data != undefined) getTotalVotes(votes);
 
