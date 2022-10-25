@@ -39,7 +39,7 @@ export default function Create() {
     },
   });
 
-  if (isLoading || data || !session) return <Loading />;
+  if (isLoading || data || !session) return <Loading title="Create" />;
 
   return (
     <>

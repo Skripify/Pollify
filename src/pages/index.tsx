@@ -28,7 +28,7 @@ export default function Home() {
     setTimeout(() => setShowToast(false), 1500);
   };
 
-  if (!data) return <Loading />;
+  if (!data) return <Loading title="Home" />;
 
   return (
     <>

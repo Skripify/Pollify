@@ -76,7 +76,7 @@ export default function QuestionPage({ userId }: { userId: string }) {
     else if (voteCount == undefined) return 0;
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading title="Question" />;
   if (!data) return <NotFound type="question" />;
 
   if (data && data != undefined) getTotalVotes(votes);
