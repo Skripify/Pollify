@@ -1,5 +1,7 @@
+import Loading from "@/components/Loading";
 import { trpc } from "@/utils/trpc";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function QuestionPage() {
@@ -43,44 +45,52 @@ export default function QuestionPage() {
     else if (voteCount == undefined) return 0;
   };
 
-  if (!data || !session)
-    return <h1 className="text-4xl font-bold">Loading...</h1>;
+  if (!data || !session) return <Loading />;
 
   if (data && data != undefined) getTotalVotes(votes);
 
   return (
-    <main className="max-w-2xl mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-10 text-center">{data?.question}</h1>
-      <div className="flex flex-col gap-4">
-        {(data.options as string[])?.map((option, index) => {
-          if (voted)
-            return (
-              <div key={index}>
-                <div className="flex justify-between">
-                  <p className="font-bold">{option}</p>
-                  <p>{getPercent(votes?.[index]?._count)?.toFixed()}%</p>
+    <>
+      <header className="p-4 flex w-full justify-between items-center">
+        <Link href="/">
+          <a className="text-4xl font-bold">Pollify</a>
+        </Link>
+      </header>
+      <main className="max-w-2xl mx-auto mt-10">
+        <h1 className="text-2xl font-bold mb-10 text-center">
+          {data?.question}
+        </h1>
+        <div className="flex flex-col gap-4">
+          {(data.options as { text: string }[])?.map((option, index) => {
+            if (voted)
+              return (
+                <div key={index}>
+                  <div className="flex justify-between">
+                    <p className="font-bold">{option.text}</p>
+                    <p>{getPercent(votes?.[index]?._count)?.toFixed()}%</p>
+                  </div>
+                  <progress
+                    className="progress progress-info w-full"
+                    value={votes?.[index]?._count ?? 0}
+                    max={totalVotes}
+                  />
                 </div>
-                <progress
-                  className="progress progress-info w-full"
-                  value={votes?.[index]?._count ?? 0}
-                  max={totalVotes}
-                />
-              </div>
+              );
+            return (
+              <button
+                type="button"
+                key={index}
+                onClick={() =>
+                  vote({ id, choice: index, token: session.user.id })
+                }
+                className="btn btn-outline rounded-md"
+              >
+                {option.text}
+              </button>
             );
-          return (
-            <button
-              type="button"
-              key={index}
-              onClick={() =>
-                vote({ id, choice: option, token: session.user.id })
-              }
-              className="btn btn-outline"
-            >
-              {option}
-            </button>
-          );
-        })}
-      </div>
-    </main>
+          })}
+        </div>
+      </main>
+    </>
   );
 }

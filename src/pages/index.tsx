@@ -1,53 +1,32 @@
 import { trpc } from "@/utils/trpc";
 import React from "react";
 import Link from "next/link";
-
-const QuestionForm: React.FC = () => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const client = trpc.useContext();
-  const { mutate, isLoading } = trpc.useMutation("questions.create", {
-    onSuccess: (data) => {
-      console.log("did we succeed?", data);
-      client.invalidateQueries(["questions.getAll"]);
-      if (!inputRef.current) return;
-      inputRef.current.value = "";
-    },
-  });
-
-  return (
-    <input
-      ref={inputRef}
-      disabled={isLoading}
-      onKeyDown={(event) => {
-        if (event.key === "Enter")
-          mutate({ question: event.currentTarget.value });
-      }}
-      className="text-black w-full"
-    ></input>
-  );
-};
+import { signOut, useSession } from "next-auth/react";
+import QuestionCard from "@/components/QuestionCard";
+import Loading from "@/components/Loading";
 
 export default function Home() {
+  const { data: session } = useSession({ required: true });
   const { data } = trpc.useQuery(["questions.getAll"]);
 
-  if (!data) return <h1 className="text-4xl font-bold">Loading...</h1>;
+  if (!data) return <Loading />;
 
   return (
     <>
-      <div className="p-4">
-        <h1 className="text-4xl font-bold">Questions</h1>
-        <ul>
-          {data.map((q) => (
-            <li key={q.id}>
-              <Link href={`/question/${q.id}`}>
-                <a className="hover:underline">{q.question}</a>
-              </Link>
-            </li>
+      <header className="p-4 flex w-full justify-between items-center">
+        <h1 className="text-4xl font-bold">Pollify</h1>
+        <Link href="/question/create">
+          <a className="btn btn-outline rounded-md">Create New Question</a>
+        </Link>
+      </header>
+      <main className="px-4">
+        <div className="grid grid-cols-1 gap-y-5 md:grid-cols-3 md:gap-x-5 mt-10">
+          {data?.map((question) => (
+            <QuestionCard key={question.id} question={question} />
           ))}
-        </ul>
+        </div>
         <div className="p-2" />
-        <QuestionForm />
-      </div>
+      </main>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { createQuestionValidator } from "@/utils/createQuestionValidator";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 import { prisma } from "../utils/prisma";
@@ -29,14 +30,12 @@ export const questionRouter = trpc
     },
   })
   .mutation("create", {
-    input: z.object({
-      question: z.string(),
-    }),
+    input: createQuestionValidator,
     async resolve({ input }) {
       return await prisma.pollQuestion.create({
         data: {
           question: input.question,
-          options: ["Yes", "No"],
+          options: input.options,
         },
       });
     },

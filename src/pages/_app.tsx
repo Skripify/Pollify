@@ -13,6 +13,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: any) {
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "@/backend/router";
 import getBaseUrl from "@/utils/getBaseUrl";
+import superjson from "superjson";
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
@@ -27,6 +28,7 @@ export default withTRPC<AppRouter>({
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
       // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      transformer: superjson,
     };
   },
   /**

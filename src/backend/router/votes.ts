@@ -7,22 +7,15 @@ export const voteRouter = trpc
   .mutation("add", {
     input: z.object({
       id: z.string(),
-      choice: z.string(),
+      choice: z.number(),
       token: z.string(),
     }),
     async resolve({ input }) {
-      const question = await prisma.pollQuestion.findFirst({
-        where: {
-          id: input.id,
-        },
-      });
       await prisma.vote.create({
         data: {
           questionId: input.id,
           voterToken: input.token,
-          choice: (question?.options as string[])?.findIndex(
-            (v) => v.toLowerCase() === input.choice.toLowerCase()
-          ),
+          choice: input.choice,
         },
       });
 
