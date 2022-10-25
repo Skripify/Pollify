@@ -7,7 +7,7 @@ export default function NotFound({ type }: { type?: string }) {
       <main className="flex flex-col h-screen justify-center text-center">
         <h1 className="text-6xl font-bold">Whoops.</h1>
         <div className="p-1" />
-        <p>That {type ?? "page"} you tried to visit doesn't exist.</p>
+        <p>That {type ?? "page"} you tried to visit doesn&apos;t exist.</p>
       </main>
     </>
   );
