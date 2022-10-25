@@ -9,6 +9,7 @@ import { trpc } from "@/utils/trpc";
 import Loading from "@/components/Loading";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import Document from "@/components/Document";
 
 export default function Create() {
   const { data: session } = useSession();
@@ -42,6 +43,7 @@ export default function Create() {
 
   return (
     <>
+      <Document title="Create" />
       <header className="p-4 flex w-full justify-between items-center">
         <Link href="/">
           <a className="text-4xl font-bold">Pollify</a>

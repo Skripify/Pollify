@@ -6,6 +6,7 @@ import Loading from "@/components/Loading";
 import { PollQuestion } from "@prisma/client";
 import getBaseUrl from "@/utils/getBaseUrl";
 import { useState } from "react";
+import Document from "@/components/Document";
 
 export default function Home() {
   const [showToast, setShowToast] = useState(false);
@@ -31,6 +32,7 @@ export default function Home() {
 
   return (
     <>
+      <Document title="Home" />
       <header className="p-4 flex w-full justify-between items-center">
         <h1 className="text-4xl font-bold">Pollify</h1>
         <Link href="/question/create">

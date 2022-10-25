@@ -1,3 +1,4 @@
+import Document from "@/components/Document";
 import Loading from "@/components/Loading";
 import { trpc } from "@/utils/trpc";
 import { useSession } from "next-auth/react";
@@ -52,6 +53,7 @@ export default function QuestionPage() {
 
   return (
     <>
+      <Document title="Question" />
       <header className="p-4 flex w-full justify-between items-center">
         <Link href="/">
           <a className="text-4xl font-bold">Pollify</a>
