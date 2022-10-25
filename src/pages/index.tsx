@@ -12,9 +12,9 @@ export default function Home() {
   const { data: session } = useSession({ required: true });
   const { data } = trpc.useQuery([
     "questions.getAll",
-    // {
-    //   id: session?.user.id as string,
-    // },
+    {
+      id: session?.user.id as string,
+    },
   ]);
 
   const url = process.env.VERCEL_URL
